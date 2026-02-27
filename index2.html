@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>計算ツール</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #f4f7f6;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 550px;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+        h2 {
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+            color: #333;
+            margin-top: 0;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .result-area {
+            margin-top: 25px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .result-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        .result-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #e44d26;
+        }
+        .info-text {
+            font-size: 13px;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        textarea{
+        width:100%;
+        height:150px;
+        border:1px solid #334155;
+        border-radius:10px;
+        padding:10px;
+         }
+        
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>ひとりでライブ</h2>
+        
+        <div class="input-group">
+            <label>スコア (A)</label>
+            <input type="number" id="t1_A" value="0" oninput="calc1()">
+        </div>
+
+        <div class="input-group">
+            <label>イベントボーナス (B) %</label>
+            <input type="number" id="t1_B" value="0" oninput="calc1()">
+        </div>
+
+        <div class="input-group">
+            <label>基礎点 (C)</label>
+            <input type="number" id="t1_C" value="0" oninput="calc1()">
+        </div>
+
+        <div class="input-group">
+            <div class="slider-label">
+                <label>ライフボーナス (D: 0〜10)</label>
+                <span id="t1_D_val" style="font-weight: bold; color: #007bff;">設定: 0 (計算値: 1)</span>
+            </div>
+            <input type="range" id="t1_D" min="0" max="10" value="0" oninput="calc1()">
+        </div>
+
+        <div class="result-area">
+            <div class="result-label">計算結果 (④)</div>
+            <div class="result-value" id="t1_res">0</div>
+        </div>
+    </div>
+
+    <div class="container" style="border-top: 5px solid #28a745;">
+        <h2>みんなでライブ</h2>
+        
+        <div class="input-group">
+            <label>スコア (A)</label>
+            <input type="number" id="t2_A" value="0" oninput="calc2()">
+        </div>
+
+        <div class="input-group">
+            <label>他のスコアの合計 (E)</label>
+            <input type="number" id="t2_E" value="0" oninput="calc2()">
+        </div>
+
+        <div class="input-group">
+            <label>イベントボーナス (B) %</label>
+            <input type="number" id="t2_B" value="0" oninput="calc2()">
+        </div>
+
+        <div class="input-group">
+            <label>基礎点 (C)</label>
+            <input type="number" id="t2_C" value="0" oninput="calc2()">
+        </div>
+
+        <div class="input-group">
+            <div class="slider-label">
+                <label>ライフボーナス (D: 0〜10)</label>
+                <span id="t2_D_val" style="font-weight: bold; color: #28a745;">設定: 0 (計算値: 1)</span>
+            </div>
+            <input type="range" id="t2_D" min="0" max="10" value="0" oninput="calc2()">
+        </div>
+
+        <div class="result-area">
+            <div class="result-label">計算結果 (⑤)</div>
+            <div class="result-value" id="t2_res">0</div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <h2>Info</h2>
+        <textarea readonly>
+【使い方】
+・主な楽曲の基礎点
+独りんぼエンヴィー…100
+ビバハピ、虚無さん、Polar Star…106
+NEO…114
+メルト、初音天地開闢神話…130
+            
+【計算式】
+・ひとりでライブ
+A÷20000…①(小数点以下切り捨て)
+(①+100)×(B+100)÷100…②(小数第二位切り捨て)
+②×C÷100…③(小数点以下切り捨て)
+③×D…④
+            
+・みんなでライブ
+A÷17000…①(小数点以下切り捨て)
+E÷340000…②(小数点以下切り捨て、上限13)
+(①+②+110)×(B+100)÷100…③(小数第二位切り捨て)
+③×C÷100…④(小数点以下切り捨て)
+④×D…⑤
+        </textarea>
+    </div>
+
+    <script>
+        // Dの数値変換マップ（共通）
+        const dMap = [1, 5, 10, 15, 20, 25, 27, 29, 31, 33, 35];
+
+        // ツール1の計算
+        function calc1() {
+            const A = parseFloat(document.getElementById('t1_A').value) || 0;
+            const B = parseFloat(document.getElementById('t1_B').value) || 0;
+            const C = parseFloat(document.getElementById('t1_C').value) || 0;
+            const indexD = parseInt(document.getElementById('t1_D').value);
+            const actualD = dMap[indexD];
+            
+            document.getElementById('t1_D_val').innerText = `設定: ${indexD} (計算値: ${actualD})`;
+
+            // ① A ÷ 20000 (切り捨て)
+            const step1 = Math.floor(A / 20000);
+            // ② (①+100) * (B+100) / 100 (小数第二位切り捨て)
+            const step2 = Math.floor(((step1 + 100) * (B + 100)) / 100 * 10) / 10;
+            // ③ ② * C / 100 (切り捨て)
+            const step3 = Math.floor((step2 * C) / 100);
+            // ④ ③ * D
+            const result = step3 * actualD;
+
+            document.getElementById('t1_res').innerText = result.toLocaleString();
+        }
+
+        // ツール2の計算
+        function calc2() {
+            const A = parseFloat(document.getElementById('t2_A').value) || 0;
+            const E = parseFloat(document.getElementById('t2_E').value) || 0;
+            const B = parseFloat(document.getElementById('t2_B').value) || 0;
+            const C = parseFloat(document.getElementById('t2_C').value) || 0;
+            const indexD = parseInt(document.getElementById('t2_D').value);
+            const actualD = dMap[indexD];
+
+            document.getElementById('t2_D_val').innerText = `設定: ${indexD} (計算値: ${actualD})`;
+
+            // ① A ÷ 17000 (切り捨て)
+            const step1 = Math.floor(A / 17000);
+            // ② E ÷ 340000 (切り捨て、上限13)
+            let step2 = Math.floor(E / 340000);
+            if (step2 > 13) step2 = 13;
+            
+            // ③ (①+②+110) * (B+100) / 100 (小数第二位切り捨て)
+            const step3 = Math.floor(((step1 + step2 + 110) * (B + 100)) / 100 * 10) / 10;
+            // ④ ③ * C / 100 (切り捨て)
+            const step4 = Math.floor((step3 * C) / 100);
+            // ⑤ ④ * D
+            const result = step4 * actualD;
+
+            document.getElementById('t2_res').innerText = result.toLocaleString();
+        }
+
+        // 初期実行
+        calc1();
+        calc2();
+    </script>
+
+</body>
+</html>
