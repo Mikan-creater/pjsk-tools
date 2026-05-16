@@ -128,7 +128,8 @@ textarea{
 ※通常イベントの場合はメインユニットのみ、ワールドリンクの場合はサポートユニットを編成し、それも含めた倍率を参考にしてください
 
 【アップデート情報】
-Ver.1.0.0　本ページ開設
+Ver.1.0　本ページ開設
+Ver.1.1　5.5周年のWLイベントの調整を反映
 </textarea>
 </div>
 
@@ -164,7 +165,7 @@ function createMain(){
 
 function createSupport(){
   const area=document.getElementById("support")
-  for(let i=0;i<20;i++){
+  for(let i=0;i<25;i++){
     area.innerHTML+=`
     <div class="card supportCard">
     <b>サポート${i+1}</b>
@@ -224,7 +225,7 @@ total+=mr*skillTable[rarity]
 }
 
 if(char) total+=25
-if(mem) total+=20
+if(mem) total+=30
 if(type) total+=25
 
 card.querySelector(".result").textContent=total+"%"
@@ -247,7 +248,7 @@ const lim=card.querySelector(".lim").value==="⭕"
 
 let total=0
 
-const rarityBonus={"☆1":0.5,"☆2":1,"☆3":2,"BD/AN":5,"☆4":7.5}
+const rarityBonus={"☆1":0.5,"☆2":1,"☆3":1.5,"BD/AN":4.5,"☆4":7}
 total+=rarityBonus[rarity]
 
 const mrTable={
